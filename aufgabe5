@@ -1,0 +1,67 @@
+clc
+clearvars
+
+% Ziel der Aufgabe ist es durch numerische Integration einer Wahrscheinlichkeitsdichtefunktion
+% eine Verteilungsfunktion zu approximieren. Folgende Standardnormalverteilung ist dabei als
+% Dichtefunktion gegeben.
+% f(x) = 1/ sqrt(2*pi) * exp(-1/2*x^2)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 5.1
+% Bei der Aufgabe wird der Definitionsbereich von −4 ≤ x ≤ 4 betrachtet. Definieren
+% Sie den Startwert (Beginn des vorgegebenen Definitionsbereichs) in MATLAB als
+% xStart und den Endwert (Ende des vorgegebenen Definitionsbereichs) als xEnd.
+% Berechnen Sie den zugehoerigen Anfangswert der Funktion f und definieren sie diesen
+% als yStart.
+xStart = -4;
+xEnd = 4;
+yStart = 1/sqrt(2*pi) * exp(-1/2*(-4)^2);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 5.2 ----> einen zu viel, prüfen <----
+
+% Die numerische Integration setzt sich aus N Integrationsschritten zusammen. In diesem
+% Fall sollte N = 100 betragen. Berechnen Sie sich die Schrittweite h derart, dass sich
+% der Definitionsbereich in N Intervalle der Schrittweite h aufteilen laesst.
+% Erzeugen Sie dann einen Vektor x des Definitionsbereichs bei dem die Abtastpunkte
+% mit der Schrittweite h auseinanderliegen.
+N = 100;
+h = (xEnd-xStart) / N;
+x = (-4:h:4); % wenn 1 zu viel, dann 4-0.08
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 5.3 
+% Legen Sie einen Vektor y an, der aus genau so vielen Elementen besteht wie der Vektor
+% x. Diese Wert koennen zu Beginn alle null sein. Speichern Sie als ersten Wert yStart
+% ab.
+y = zeros(size(x));
+y(1) = yStart;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 5.4 
+% Mit folgender Iterationsvorschrift werden dann nach dem Euler-Verfahren die anderen
+% Werte von y berechnet.
+% yi+1 = yi + h · f(x_i) mit i = 1, 2, 3, ..., N
+% So erhalten Sie in dem Vektor y die approximierten Werte der Verteilungsfunktion.
+fx = @(x) 1./(sqrt(2*pi)) .*exp(-1/2*x.^2);
+
+for i=1: N
+    y(i+1) = y(i) + h.*fx(x(i)); 
+end   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 5.5 
+% Definieren Sie sich einen Vektor f fuer die Dichtefunktion f(x) und plotten Sie 
+% sie in
+% einem Diagramm zusammen mit den approximierten Werten der Verteilungsfunktion.
+
+f = feval(fx, x);
+
+plot(x,y,'g');
+hold on
+plot(x,f,'r');
+
+
+
+
+
